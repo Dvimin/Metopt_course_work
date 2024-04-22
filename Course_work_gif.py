@@ -3,6 +3,7 @@ import networkx as nx
 import time
 from IPython.display import clear_output
 
+
 # Веса
 matrix = [
     [0, 2, 3, 4, 6, 2],

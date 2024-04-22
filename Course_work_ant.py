@@ -21,6 +21,7 @@ class Ant:
 
 
 class AntColonyAlgorithm:
+
     def __init__(self, time_matrix, city_classes, class_requirements, n_ants, n_best, n_iterations, decay, alpha=1,
                  beta=1, start=None):
         self.time_matrix = time_matrix

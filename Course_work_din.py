@@ -6,6 +6,7 @@ def din_method(time_matrix, city_classes, class_requirements):
     # Начальная точка
     start = 0
 
+
     # Создаем комбинации городов по классам
     city_combinations_per_class = {
         cls: [city for city in range(n) if city_classes[city] == cls]

@@ -5,6 +5,7 @@ import matplotlib.pyplot as plt
 import networkx as nx
 
 
+
 def plot_graph_with_path(ax, time_matrix, path, city_classes, method):
     G = nx.Graph()
     for i in range(len(time_matrix)):
