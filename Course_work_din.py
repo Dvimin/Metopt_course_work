@@ -1,41 +1,34 @@
 import itertools
 
-time_matrix = [
-    [0, 2, 3, 4, 6, 2],
-    [2, 0, 7, 5, 3, 5],
-    [3, 7, 0, 2, 5, 7],
-    [4, 5, 2, 0, 6, 1],
-    [6, 3, 5, 6, 0, 2],
-    [1, 3, 2, 6, 9, 0],
-]
-
-city_classes = [1, 2, 3, 1, 2, 3]
-class_requirements = {1: 2, 2: 2, 3: 2}
-
-
 def din_method(time_matrix, city_classes, class_requirements):
-    cities_to_visit = []
-    for cls, num in class_requirements.items():
-        cities_of_class = [i for i, c in enumerate(city_classes) if c == cls][:num]
-        cities_to_visit.extend(cities_of_class)
+    n = len(time_matrix)  # Количество городов
 
-    all_routes = itertools.permutations(cities_to_visit)
+    # Начальная точка
+    start = 0
+
+    # Создаем комбинации городов по классам
+    city_combinations_per_class = {
+        cls: [city for city in range(n) if city_classes[city] == cls]
+        for cls in class_requirements
+    }
+
+    # Создаем все комбинированные маршруты с учетом классов и требований
+    valid_routes = itertools.product(
+        *(itertools.combinations(city_combinations_per_class[cls], class_requirements[cls])
+          for cls in class_requirements)
+    )
 
     min_route_cost = float('inf')
-    min_route = ()
+    min_route = []
 
-    for route in all_routes:
-        class_counter = {cls: 0 for cls in class_requirements}
-        for city in route:
-            class_counter[city_classes[city]] += 1
-        if any(class_counter[cls] < num for cls, num in class_requirements.items()):
-            continue
-        current_route_cost = time_matrix[0][route[0]] + sum(
-            time_matrix[route[i]][route[i + 1]] for i in range(len(route) - 1)) + time_matrix[route[-1]][0]
-        if current_route_cost < min_route_cost:
-            min_route_cost = current_route_cost
-            min_route = route
+    # Перебираем все валидные маршруты, проверяя их стоимость
+    for route_combination in valid_routes:
+        for route in itertools.permutations([city for cls_route in route_combination for city in cls_route]):
+            # Стоимость маршрута с начальной и возвращающей точкой
+            current_route_cost = sum(time_matrix[city][next_city] for city, next_city in
+                                     zip((start,) + route, route + (start,)))
+            if current_route_cost < min_route_cost:
+                min_route_cost = current_route_cost
+                min_route = route
 
-    print(f"Минимальная стоимость маршрута: {min_route_cost}")
-    print(f"Минимальный маршрут: {min_route}")
-
+    return min_route_cost, min_route
