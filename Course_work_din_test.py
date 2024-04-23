@@ -1,5 +1,6 @@
 import itertools
 
+
 # Веса
 time_matrix = [
     [0, 2, 3, 4, 6, 1],
@@ -55,5 +56,5 @@ def din_method(time_matrix, city_classes, class_requirements):
     return min_route_cost, min_route
 
 # Выводим результат работы функции с учетом классов и требований
-result_cost, result_route = din_method(matrix, city_classes, class_requirements)
+result_cost, result_route = din_method(time_matrix, city_classes, class_requirements)
 print(f"\nРезультат динамического метода: стоимость {result_cost}, маршрут {result_route}")
