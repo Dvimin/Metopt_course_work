@@ -59,9 +59,17 @@ class AntColonyAlgorithm:
                 ants = [Ant(random.choice(self.all_cities)) for _ in range(self.n_ants)]
                 for ant_index, ant in enumerate(ants):
                     print(f" Муравей {ant_index + 1}/{self.n_ants} начинает маршрут в городе {ant.current_city}")
+                    print("Шаг/Город", end=" ")
+                    for i in range(len(self.all_cities)):
+                        print(f"& {i}", end=" ")  # заголовки столбцов
+                    print("\\\\ \\hline")
+                    step = 0
                     while not self._satisfies_class_requirements(ant):
+                        print(f"{step}", end=" ")
+                        step += 1
                         next_city = self._select_next_city_print(ant)
                         ant.visit_city(next_city)
+
                         #print(f"  Муравей {ant_index + 1} посетил город {next_city}, маршрут: {ant.path}")
 
                     cost = ant.path_cost(self.time_matrix)
@@ -129,10 +137,7 @@ class AntColonyAlgorithm:
             raise ValueError("Sum of probabilities is zero. Check pheromone table and distances.")
 
         tab_width = 8
-
-        # Начало строки таблицы для LaTeX
-        print("    ", end="")  # Подразумеваемые отступы для красоты LaTeX вывода
-
+        print("    ", end="")
         for i, prob in enumerate(move_prob):
             if prob > 0:
                 # Отформатированное значение вероятности для LaTeX
@@ -143,7 +148,7 @@ class AntColonyAlgorithm:
         # Завершение строки таблицы для LaTeX
         print("\\\\ \\hline")
 
-        # Выбираем следующий город на основе расчетных вероятностей
+
         next_city = np.random.choice(self.all_cities, 1, p=move_prob)[0]
         return next_city
 
@@ -189,11 +194,6 @@ class AntColonyAlgorithm:
         # for row in self.pheromone:
         #     print(" ".join(f"{pheromone:.4f}" for pheromone in row))
 
-    # def _print_matrix_feromon(self, pheromone):
-    #     for i in range(len(self.pheromone)):
-    #         self.pheromone[i][i] = 0.0
-    #     for row in self.pheromone:
-    #         print(" ".join(f"{pheromone:.4f}" for pheromone in row))
 
     def _print_matrix_feromon(self, pheromone):
 
@@ -236,16 +236,42 @@ class_requirements = {1: 2, 2: 1, 3: 2}
 #                                        decay=0.5, alpha=1, beta=2)
 #
 
-aco_algorithm = AntColonyAlgorithm(time_matrix, city_classes, class_requirements, n_ants=5, n_best=3, n_iterations=100,
-                                   decay=0.5, alpha=1, beta=2, start=0)
+aco_algorithm = AntColonyAlgorithm(time_matrix, city_classes, class_requirements, n_ants=50, n_best=3, n_iterations=20,
+                                   decay=0.5, alpha=1, beta=2)
 
 
 shortest_path, cost = aco_algorithm.run()
-shortest_path = [0, 3, 5, 2, 1]
-
-fig, axs = plt.subplots(1, 2, figsize=(16, 6))
-plot_graph_with_path(axs[0], time_matrix, shortest_path, city_classes, 'ANT')
+# shortest_path = [0, 5, 2, 3, 4]
+# fig, axs = plt.subplots(1, 1, figsize=(6, 6))
+# plot_graph_with_path(axs, time_matrix, shortest_path, city_classes, '')
+shortest_path = [3, 2, 5, 0, 1]
+fig, axs = plt.subplots(1, 1, figsize=(6, 6))
+plot_graph_with_path(axs, time_matrix, shortest_path, city_classes, '')
 plt.show()
 
 print("Shortest path: ", shortest_path)
 print("Cost of the path: ", cost)
+
+#
+# time_matrix = [
+#     [0, 7, 9, 9, 1, 2, 6],
+#     [7, 0, 4, 6, 6, 4, 7],
+#     [9, 4, 0, 2, 9, 9, 2],
+#     [9, 6, 2, 0, 2, 7, 10],
+#     [1, 6, 9, 2, 0, 8, 8],
+#     [2, 4, 9, 7, 8, 0, 4],
+#     [6, 7, 2, 10, 8, 4, 0],
+# ]
+#
+#
+# city_classes = [3, 1, 2, 3, 1, 2, 1]
+# shortest_path = [4, 0, 5, 2, 3]
+# fig, axs = plt.subplots(1, 2, figsize=(16, 6))
+# plot_graph_with_path(axs[1], time_matrix, shortest_path, city_classes, '')
+# shortest_path = [0, 0]
+# plot_graph_with_path(axs[0], time_matrix, shortest_path, city_classes, '')
+#
+#
+#
+
+

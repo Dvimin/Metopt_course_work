@@ -33,7 +33,6 @@ def plot_graph_with_path(ax, time_matrix, path, city_classes, method):
     edge_labels = nx.get_edge_attributes(G, 'weight')
     nx.draw_networkx_edge_labels(G, pos, edge_labels=edge_labels, ax=ax)
 
-    ax.set_title(f'{method} {len(time_matrix)}x{len(time_matrix)} Graph with highlighted path')
     ax.axis('off')
 
 # # Веса
